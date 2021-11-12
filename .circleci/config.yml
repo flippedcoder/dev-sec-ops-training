@@ -17,6 +17,24 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
+  static-test:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: "SAST testing"
+          command: retire --path web
+  dynamic-test:
+    steps:
+      - checkout
+      - run:
+          name: "DAST testing"
+          command: nexploit-cli scan:run --token $NEXPLOIT_TOKEN --name "scan from CircleCI" >> $BASH_ENV
+      - run:
+          name: Scan output
+          command: printf "Scan available at https://nexploit.app/scans/{$NEXPLOIT_ID}"
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
