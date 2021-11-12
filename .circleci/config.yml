@@ -26,6 +26,8 @@ jobs:
           name: "SAST testing"
           command: retire --path web
   dynamic-test:
+    docker:
+      - image: cimg/base:stable
     steps:
       - checkout
       - run:
