@@ -19,9 +19,12 @@ jobs:
           command: "echo Hello, World!"
   static-test:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:17.1.0
     steps:
       - checkout
+      - run:
+          name: "install web"
+          command: cd web; npm install -g
       - run:
           name: "SAST testing"
           command: retire --path web
