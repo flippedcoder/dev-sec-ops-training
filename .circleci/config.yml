@@ -23,6 +23,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "install web"
+          command: cd web; mkdir ~/.npm-global; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm install
+      - run:
           name: "install retire"
           command: cd web; mkdir ~/.npm-global; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm install -g retire
       - run:
