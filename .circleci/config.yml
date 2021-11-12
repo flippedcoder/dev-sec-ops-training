@@ -44,3 +44,5 @@ workflows:
   say-hello-workflow:
     jobs:
       - say-hello
+      - static-test
+      - dynamic-test
