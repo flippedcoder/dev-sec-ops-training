@@ -35,7 +35,6 @@ jobs:
           command: "echo This is where you would upload code to AWS or Heroku or something to do some testing before going to production"
   dynamic-test:
     docker:
-      - image: cimg/base:stable
       - image: owasp/zap2docker-stable
     steps:
       - checkout
