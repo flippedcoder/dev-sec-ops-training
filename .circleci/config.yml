@@ -38,9 +38,9 @@ jobs:
       - image: ubuntu-latest
     steps:
       - checkout
-      - run:
-          name: ZAP Scan for DAST
-          command: docker run -t owasp/zap2docker-stable zap-baseline.py -t https://flippedcoding.com
+      - run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASS
+          docker run -t owasp/zap2docker-stable zap-baseline.py -t https://flippedcoding.com
 
 workflows:
   say-hello-workflow:
