@@ -9,8 +9,23 @@ jobs:
         - run:
             name: "building artifact..."
             command: "echo Artifact has been built!"
+    static-test:
+      docker:
+        - image: cimg/node:17.1.0
+      steps:
+        - checkout
+        - run:
+            name: "install packages"
+            command: cd web; mkdir ~/.npm-global; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm install
+        - run:
+            name: "install retire"
+            command: cd web; npm config list; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm install -g retire
+        - run:
+            name: "SAST testing"
+            command: export PATH=~/.npm-global/bin:$PATH; retire --path web
 
 workflows:
   demo-flow:
     jobs:
       - build-artifact
+      - static-test
