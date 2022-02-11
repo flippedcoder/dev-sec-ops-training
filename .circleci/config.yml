@@ -1,53 +1,11 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine.
-# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
 jobs:
-  say-hello:
+  build-artifact:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
-  static-test:
-    docker:
-      - image: cimg/node:17.1.0
-    steps:
-      - checkout
-      - run:
-          name: "install web"
-          command: cd web; mkdir ~/.npm-global; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm install
-      - run:
-          name: "install retire"
-          command: cd web; npm config list; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm install -g retire
-      - run:
-          name: "SAST testing"
-          command: export PATH=~/.npm-global/bin:$PATH; retire --path web
-  deploy-staging:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - run:
-          name: "deploy code to staging"
-          command: "echo This is where you would upload code to AWS or Heroku or something to do some testing before going to production"
-  dynamic-test:
-    docker:
-      - image: owasp/zap2docker-stable
-    steps:
-      - checkout
-      - run:
-          name: Run DAST
-          command: |
-            docker login -u $DOCKER_USER --password-stdin < $DOCKER_PASS
-            docker run owasp/zap2docker-stable zap-baseline.py -t https://flippedcoding.com
-
-workflows:
-  say-hello-workflow:
-    jobs:
-      - say-hello
-      - static-test
-      - deploy-staging
-      - dynamic-test
+          name: "building artifact..."
+          command: "echo Artifact has been built!"
