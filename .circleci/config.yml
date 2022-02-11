@@ -40,7 +40,7 @@ jobs:
       - checkout
       - run: |
           docker login -u $DOCKER_USER --password-stdin < $DOCKER_PASS
-          docker run -i owasp/zap2docker-stable zap-cli quick-scan --self-contained --start-options '-config api.disablekey=true' https://flippedcoding.com
+          docker run -t owasp/zap2docker-stable zap-baseline.py -t https://flippedcoding.com
 
 workflows:
   say-hello-workflow:
