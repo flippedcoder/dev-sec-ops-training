@@ -36,13 +36,13 @@ jobs:
   dynamic-test:
     docker:
       - image: cimg/base:stable
+      - image: owasp/zap2docker-stable
     steps:
       - checkout
       - run:
           name: Run DAST
           command: |
             docker login -u $DOCKER_USER --password-stdin < $DOCKER_PASS
-            docker pull owasp/zap2docker-stable
             docker run -t owasp/zap2docker-stable zap-baseline.py -t https://flippedcoding.com
 
 workflows:
