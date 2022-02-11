@@ -36,11 +36,9 @@ jobs:
   dynamic-test:
     docker:
       - image: cimg/base:stable
-        user: root
     steps:
       - checkout
       - run: |
-          #!/usr/bin/env bash
           docker login -u $DOCKER_USER --password-stdin < $DOCKER_PASS
           docker run -t owasp/zap2docker-stable zap-baseline.py -t https://flippedcoding.com
 
