@@ -30,7 +30,17 @@ jobs:
         - checkout
         - run:
             name: "building artifact..."
-            command: "echo Artifact has been built!"
+            command: "echo Artifact has been deployed to dev environment."
+    dynamic-test:
+      docker:
+        - image: owasp/zap2docker-stable
+      steps:
+        - checkout
+        - run:
+            name: Run DAST
+            command: |
+              docker login -u $DOCKER_USER --password-stdin < $DOCKER_PASS
+              docker run -t owasp/zap2docker-stable zap-baseline.py -t https://flippedcoding.com
 
 
 workflows:
@@ -39,3 +49,4 @@ workflows:
       - build-artifact
       - static-test
       - deploy-to-dev
+      - dynamic-test
