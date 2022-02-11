@@ -17,6 +17,29 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
+  static-test:
+    docker:
+      - image: cimg/node:17.1.0
+    steps:
+      - checkout
+      - run:
+          name: "install web"
+          command: cd web; mkdir ~/.npm-global; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm install
+      - run:
+          name: "install retire"
+          command: cd web; npm config list; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm install -g retire
+      - run:
+          name: "SAST testing"
+          command: export PATH=~/.npm-global/bin:$PATH; retire --path web
+  dynamic-test:
+    docker:
+      - image: ubuntu-latest
+    steps:
+      - checkout
+      - run:
+          name: ZAP Scan for DAST
+          command: docker run -t owasp/zap2docker-stable zap-baseline.py -t https://flippedcoding.com
+
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -24,3 +47,5 @@ workflows:
   say-hello-workflow:
     jobs:
       - say-hello
+      - static-test
+      - dynamic-test
