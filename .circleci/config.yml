@@ -9,3 +9,8 @@ jobs:
       - run:
           name: "building artifact..."
           command: "echo Artifact has been built!"
+
+workflow:
+  demo-flow:
+    jobs:
+      - build-artifact
