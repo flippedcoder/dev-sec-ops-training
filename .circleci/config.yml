@@ -35,7 +35,7 @@ jobs:
           command: "echo This is where you would upload code to AWS or Heroku or something to do some testing before going to production"
   dynamic-test:
     docker:
-      - image: ubuntu-latest
+      - image: cimg/base:stable
         user: root
     steps:
       - checkout
