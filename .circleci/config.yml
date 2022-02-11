@@ -1,16 +1,16 @@
 version: 2.1
 
 jobs:
-  build-artifact:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - run:
-          name: "building artifact..."
-          command: "echo Artifact has been built!"
+    build-artifact:
+      docker:
+        - image: cimg/base:stable
+      steps:
+        - checkout
+        - run:
+            name: "building artifact..."
+            command: "echo Artifact has been built!"
 
-workflow:
+workflows:
   demo-flow:
     jobs:
       - build-artifact
