@@ -42,7 +42,7 @@ jobs:
           name: Run DAST
           command: |
             docker login -u $DOCKER_USER --password-stdin < $DOCKER_PASS
-            docker run owasp/zap2docker-stable zap-baseline.py -t "https://flippedcoding.com"
+            docker run owasp/zap2docker-stable zap-baseline.py -t https://flippedcoding.com
 
 workflows:
   say-hello-workflow:
