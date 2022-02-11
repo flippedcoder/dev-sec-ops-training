@@ -47,5 +47,5 @@ workflows:
     jobs:
       - say-hello
       - static-test
-      - deply-staging
+      - deploy-staging
       - dynamic-test
