@@ -31,17 +31,6 @@ jobs:
       - run:
           name: "SAST testing"
           command: export PATH=~/.npm-global/bin:$PATH; retire --path web
-  dynamic-test:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - checkout
-      - run:
-          name: "DAST testing"
-          command: nexploit-cli scan:run --token $NEXPLOIT_TOKEN --name "scan from CircleCI" >> $BASH_ENV
-      - run:
-          name: Scan output
-          command: printf "Scan available at https://nexploit.app/scans/{$NEXPLOIT_ID}"
 
 
 # Invoke jobs via workflows
