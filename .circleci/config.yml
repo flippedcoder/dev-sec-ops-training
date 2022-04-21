@@ -31,6 +31,33 @@ jobs:
       - run:
           name: "SAST testing"
           command: export PATH=~/.npm-global/bin:$PATH; retire --path web
+  unit-test:
+    docker:
+      - image: cimg/node:17.1.0
+    steps:
+      - checkout
+      - run:
+          name: "run front-end tests"
+          command: cd web; mkdir ~/.npm-global; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm test
+  deploy-qa:
+    docker:
+      - image: cimg/node:17.1.0
+    steps:
+      - checkout
+      - run:
+          name: "deploy to QA env"
+          command: echo "Deployed to QA"
+  interactive-test:
+    docker:
+      - image: cimg/node:17.1.0
+    steps:
+      - checkout
+      - run:
+          name: "IAST testing"
+          command: nexploit-cli scan:run --token $NEXPLOIT_TOKEN --name "scan from CircleCI" >> $BASH_ENV
+      - run:
+          name: Scan output
+          command: printf "Scan available at https://nexploit.app/scans/{$NEXPLOIT_ID}”
 
 
 # Invoke jobs via workflows
@@ -40,3 +67,6 @@ workflows:
     jobs:
       - say-hello
       - static-test
+      - unit-test
+      - deploy-qa
+      - interactive-test
