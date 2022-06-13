@@ -67,6 +67,4 @@ workflows:
     jobs:
       - say-hello
       - static-test
-      - unit-test
       - deploy-qa
-      - interactive-test
