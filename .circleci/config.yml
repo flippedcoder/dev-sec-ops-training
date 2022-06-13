@@ -57,3 +57,4 @@ workflows:
       - static-test
       - unit-test
       - say-hello
+      - deploy-qa
