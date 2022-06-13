@@ -58,3 +58,4 @@ workflows:
       - unit-test
       - say-hello
       - deploy-qa
+      - interactive-test
