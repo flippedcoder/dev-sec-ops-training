@@ -1,13 +1,13 @@
 version: 2.1
 jobs:
-  say-hello:
+  unit-test:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:17.1.0
     steps:
       - checkout
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: "run front-end tests"
+          command: cd web; mkdir ~/.npm-global; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm test
   static-test:
     docker:
       - image: cimg/node:17.1.0
@@ -22,14 +22,14 @@ jobs:
       - run:
           name: "SAST testing"
           command: export PATH=~/.npm-global/bin:$PATH; retire --path web
-  unit-test:
+  build-app:
     docker:
-      - image: cimg/node:17.1.0
+      - image: cimg/base:stable
     steps:
       - checkout
       - run:
-          name: "run front-end tests"
-          command: cd web; mkdir ~/.npm-global; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm test
+          name: "Build app"
+          command: "echo App built"
   deploy-qa:
     docker:
       - image: cimg/node:17.1.0
@@ -37,7 +37,7 @@ jobs:
       - checkout
       - run:
           name: "deploy to QA env"
-          command: echo "Deployed to QA"
+          command: echo "Deployed to QA environment"
   interactive-test:
     docker:
       - image: cimg/node:17.1.0
@@ -55,10 +55,10 @@ jobs:
 
 
 workflows:
-  say-hello-workflow:
+  deploy-to-qa-workflow:
     jobs:
       - static-test
       - unit-test
-      - say-hello
+      - build-app
       - deploy-qa
       - interactive-test
