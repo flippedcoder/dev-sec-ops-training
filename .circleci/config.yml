@@ -44,6 +44,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "install nexploit-cli"
+          command: cd web; npm config list; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm install -g @neuralegion/nexploit-cli
+      - run:
           name: "IAST testing"
           command: nexploit-cli scan:run --token $NEXPLOIT_TOKEN --name "scan from CircleCI" >> $BASH_ENV
       - run:
