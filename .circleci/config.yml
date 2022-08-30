@@ -22,6 +22,20 @@ jobs:
       - run:
           name: "SAST testing"
           command: export PATH=~/.npm-global/bin:$PATH; retire --path web
+  husky-ci:
+    docker:
+      - image: cimg/node:17.1.0
+    steps:
+      - checkout
+      - run:
+          name: "Build app"
+          environment:
+            HUSKYCI_CLIENT_URL: http://urlto.huskyci-client
+            HUSKYCI_CLIENT_API_ADDR: http://urlto.huskyci-API
+            HUSKYCI_CLIENT_REPO_URL: git@github.com:flippedcoder/dev-sec-ops-training.git
+            HUSKYCI_CLIENT_REPO_BRANCH: main
+            HUSKYCI_CLIENT_API_USE_HTTPS: "false"
+          command: wget $HUSKYCI_CLIENT_URL/huskyci-client & chmod +x huskyci-client & ./huskyci-client
   build-app:
     docker:
       - image: cimg/base:stable
@@ -38,6 +52,18 @@ jobs:
       - run:
           name: "deploy to QA env"
           command: echo "Deployed to QA environment"
+  nuclei:
+    docker:
+      - image: cimg/go
+    steps:
+      - checkout
+      - run:
+          name: "install nuclei-cli"
+          command: go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
+          # command: git clone https://github.com/projectdiscovery/nuclei.git; cd nuclei/v2/cmd/nuclei; go build; mv nuclei /usr/local/bin/; nuclei -version
+      - run:
+          name: "Nuclei scan on staging"
+          command: nuclei -u https://www.flippedcoding.com
   interactive-test:
     docker:
       - image: cimg/node:17.1.0
@@ -59,6 +85,8 @@ workflows:
     jobs:
       - static-test
       - unit-test
+      - husky-ci
       - build-app
       - deploy-qa
+      - nuclei
       - interactive-test
