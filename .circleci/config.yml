@@ -35,7 +35,7 @@ jobs:
             HUSKYCI_CLIENT_REPO_URL: git@github.com:flippedcoder/dev-sec-ops-training.git
             HUSKYCI_CLIENT_REPO_BRANCH: main
             HUSKYCI_CLIENT_API_USE_HTTPS: "false"
-          command: wget $HUSKYCI_CLIENT_URL/huskyci-client & chmod +x huskyci-client & ./huskyci-client
+          command: wget $HUSKYCI_CLIENT_URL/huskyci-client; chmod +x huskyci-client; ./huskyci-client
   build-app:
     docker:
       - image: cimg/base:stable
