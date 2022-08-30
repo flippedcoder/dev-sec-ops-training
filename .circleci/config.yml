@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   unit-static-tests:
     docker:
-      - image: cimg/node:17.1.0
+      - image: cimg/node:14.20.0
     steps:
       - checkout
       - run:
