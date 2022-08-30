@@ -28,7 +28,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "run"
+          name: "run more static tests"
           environment:
             HUSKYCI_CLIENT_URL: https://www.flippedcoding.com
             HUSKYCI_CLIENT_API_ADDR: https://www.flippedcoding.com
