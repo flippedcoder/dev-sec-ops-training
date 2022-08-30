@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  unit-static-tests:
+  unit-test:
     docker:
       - image: cimg/node:14.20.0
     steps:
@@ -11,6 +11,14 @@ jobs:
       - run:
           name: "run front-end tests"
           command: cd web; yarn rw test
+  static-test:
+    docker:
+      - image: cimg/node:17.1.0
+    steps:
+      - checkout
+      - run:
+          name: "install dependencies"
+          command: yarn
       - run:
           name: "SAST testing"
           command: export PATH=~/.npm-global/bin:$PATH; retire --path web
@@ -75,7 +83,8 @@ jobs:
 workflows:
   deploy-to-qa-workflow:
     jobs:
-      - unit-static-tests
+      - static-test
+      - unit-test
       - husky-ci
       - build-app
       - deploy-qa
