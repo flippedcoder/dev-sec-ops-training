@@ -7,18 +7,15 @@ jobs:
       - checkout
       - run:
           name: "run front-end tests"
-          command: cd web; mkdir ~/.npm-global; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm test
+          command: cd web; yarn rw test
   static-test:
     docker:
       - image: cimg/node:17.1.0
     steps:
       - checkout
       - run:
-          name: "install web"
-          command: cd web; mkdir ~/.npm-global; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm install
-      - run:
-          name: "install retire"
-          command: cd web; npm config list; npm config set prefix '~/.npm-global'; export PATH=~/.npm-global/bin:$PATH; source ~/.profile; npm install -g retire
+          name: "install dependencies"
+          command: yarn
       - run:
           name: "SAST testing"
           command: export PATH=~/.npm-global/bin:$PATH; retire --path web
@@ -28,7 +25,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Build app"
+          name: "run"
           environment:
             HUSKYCI_CLIENT_URL: https://www.flippedcoding.com
             HUSKYCI_CLIENT_API_ADDR: https://www.flippedcoding.com
