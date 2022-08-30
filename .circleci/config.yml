@@ -30,8 +30,8 @@ jobs:
       - run:
           name: "Build app"
           environment:
-            HUSKYCI_CLIENT_URL: http://urlto.huskyci-client
-            HUSKYCI_CLIENT_API_ADDR: http://urlto.huskyci-API
+            HUSKYCI_CLIENT_URL: https://www.flippedcoding.com
+            HUSKYCI_CLIENT_API_ADDR: https://www.flippedcoding.com
             HUSKYCI_CLIENT_REPO_URL: git@github.com:flippedcoder/dev-sec-ops-training.git
             HUSKYCI_CLIENT_REPO_BRANCH: main
             HUSKYCI_CLIENT_API_USE_HTTPS: "false"
@@ -54,9 +54,10 @@ jobs:
           command: echo "Deployed to QA environment"
   nuclei:
     docker:
-      - image: cimg/go
+      - image: cimg/go:1.19.0
     steps:
       - checkout
+      - run: go version
       - run:
           name: "install nuclei-cli"
           command: go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
