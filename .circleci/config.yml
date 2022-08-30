@@ -1,14 +1,6 @@
 version: 2.1
 jobs:
-  unit-test:
-    docker:
-      - image: cimg/node:17.1.0
-    steps:
-      - checkout
-      - run:
-          name: "run front-end tests"
-          command: cd web; yarn rw test
-  static-test:
+  unit-static-tests:
     docker:
       - image: cimg/node:17.1.0
     steps:
@@ -16,6 +8,9 @@ jobs:
       - run:
           name: "install dependencies"
           command: yarn
+      - run:
+          name: "run front-end tests"
+          command: cd web; yarn rw test
       - run:
           name: "SAST testing"
           command: export PATH=~/.npm-global/bin:$PATH; retire --path web
@@ -58,7 +53,6 @@ jobs:
       - run:
           name: "install nuclei-cli"
           command: go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
-          # command: git clone https://github.com/projectdiscovery/nuclei.git; cd nuclei/v2/cmd/nuclei; go build; mv nuclei /usr/local/bin/; nuclei -version
       - run:
           name: "Nuclei scan on staging"
           command: nuclei -u https://www.flippedcoding.com
@@ -81,8 +75,7 @@ jobs:
 workflows:
   deploy-to-qa-workflow:
     jobs:
-      - static-test
-      - unit-test
+      - unit-static-tests
       - husky-ci
       - build-app
       - deploy-qa
