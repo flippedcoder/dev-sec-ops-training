@@ -38,12 +38,15 @@ jobs:
           command: wget $HUSKYCI_CLIENT_URL/huskyci-client; chmod +x huskyci-client; ./huskyci-client
   build-app:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:14.20.0
     steps:
       - checkout
       - run:
+          name: "install dependencies"
+          command: yarn
+      - run:
           name: "Build app"
-          command: "echo App built"
+          command: yarn rw build
   deploy-qa:
     docker:
       - image: cimg/node:17.1.0
@@ -51,7 +54,7 @@ jobs:
       - checkout
       - run:
           name: "deploy to QA env"
-          command: echo "Deployed to QA environment"
+          command: echo "Deployed to QA environment with AWS S3 bucket magic"
   nuclei:
     docker:
       - image: cimg/go:1.19.0
