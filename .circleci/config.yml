@@ -58,5 +58,7 @@ workflows:
   deploy-to-qa:
     jobs:
       - unit-tests
+      - sast
       - build-app
       - deploy-qa
+      - dast
