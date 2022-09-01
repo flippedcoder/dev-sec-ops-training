@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  unit-test:
+  unit-tests:
     docker:
       - image: cimg/node:14.20.0
     steps:
@@ -9,7 +9,7 @@ jobs:
           name: "install dependencies"
           command: yarn
       - run:
-          name: "run front-end tests"
+          name: "run project unit tests"
           command: yarn redwood test
   build-app:
     docker:
@@ -20,11 +20,20 @@ jobs:
           name: "install dependencies"
           command: yarn
       - run:
-          name: "build app"
+          name: "build deploy artifact"
           command: yarn redwood build
+  deploy-qa:
+    docker:
+      - image: cimg/node:17.1.0
+    steps:
+      - checkout
+      - run:
+          name: "deploy to QA env"
+          command: echo "Deployed to QA environment with AWS S3 bucket magic or Azure container magic"
 
 workflows:
-  deploy-workflow:
+  deploy-to-qa:
     jobs:
-      - unit-test
+      - unit-tests
       - build-app
+      - deploy-qa
