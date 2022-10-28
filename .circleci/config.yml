@@ -23,3 +23,8 @@ jobs:
           name: "Execute retire.js"
           command: cd web; retire --path web
 
+workflows:
+  deploy-to-env:
+    jobs:
+      - unit-tests
+      - sast
