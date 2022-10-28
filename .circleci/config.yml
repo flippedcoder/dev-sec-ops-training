@@ -60,5 +60,5 @@ workflows:
       - unit-tests
       - sast
       - build-app
-      - deploy-qa
+      - deploy-feature
       - dast
