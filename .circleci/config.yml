@@ -22,9 +22,45 @@ jobs:
       - run:
           name: "Execute retire.js"
           command: cd web; retire --path web
+  build-app:
+    docker:
+      - image: cimg/node:14.20.0
+    steps:
+      - checkout
+      - run:
+          name: "Install app dependencies"
+          command: yarn
+      - run:
+          name: "Build Redwood app artifact"
+          command: yarn redwood build
+  deploy-feature:
+    docker:
+      - image: cimg/node:17.1.0
+    steps:
+      - checkout
+      - run:
+          name: "Deploy to feature environment"
+          run: echo "Deployed to feature environment with AWS S3 or Azure Container magic..."
+  dast:
+    docker:
+      - image: cimg/go:1.19.0
+    steps:
+      - checkout
+      - run:
+          name: "Check Go version"
+          command: go version
+      - run:
+          name: "Install Nuclei CLI"
+          command: go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
+      - run:
+          name: "Nuclei scan on feature environment"
+          command: nuclei -u https://flippedcoding.com
 
 workflows:
   deploy-to-env:
     jobs:
       - unit-tests
       - sast
+      - build-app
+      - deploy-feature
+      - dast
