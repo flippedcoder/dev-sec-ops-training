@@ -6,59 +6,20 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "install dependencies"
+          name: "Install app dependencies"
           command: yarn
       - run:
-          name: "run project unit tests"
+          name: "Run app unit tests"
           command: yarn redwood test
   sast:
-    docker:
-      - image: cimg/node:14:20.0
-    steps:
-      - checkout
-      - run:
-          name: "install dependencies"
-          command: yarn
-      - run:
-          name: "execute retire.js"
-          command: cd web; retire --path web
-  build-app:
     docker:
       - image: cimg/node:14.20.0
     steps:
       - checkout
       - run:
-          name: "install dependencies"
+          name: "Install app dependencies"
           command: yarn
       - run:
-          name: "build deploy artifact"
-          command: yarn redwood build
-  deploy-qa:
-    docker:
-      - image: cimg/node:17.1.0
-    steps:
-      - checkout
-      - run:
-          name: "deploy to QA env"
-          command: echo "Deployed to QA environment with AWS S3 bucket magic or Azure container magic"
-  dast:
-    docker:
-      - image: cimg/go:1.19.0
-    steps:
-      - checkout
-      - run: go version
-      - run:
-          name: "install nuclei-cli"
-          command: go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
-      - run:
-          name: "Nuclei scan on QA"
-          command: nuclei -u https://flippedcoding.com
+          name: "Execute retire.js"
+          command: cd web; retire --path web
 
-workflows:
-  deploy-to-qa:
-    jobs:
-      - unit-tests
-      - sast
-      - build-app
-      - deploy-qa
-      - dast
