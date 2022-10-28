@@ -6,21 +6,21 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Install app dependencies"
+          name: "install dependencies"
           command: yarn
       - run:
-          name: "Run app unit tests"
+          name: "run project unit tests"
           command: yarn redwood test
   sast:
     docker:
-      - image: cimg/node:14.20.0
+      - image: cimg/node:14:20.0
     steps:
       - checkout
       - run:
-          name: "Install app dependencies"
+          name: "install dependencies"
           command: yarn
       - run:
-          name: "Execute retire.js"
+          name: "execute retire.js"
           command: cd web; retire --path web
   build-app:
     docker:
@@ -28,10 +28,10 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Install app dependencies"
+          name: "install dependencies"
           command: yarn
       - run:
-          name: "Build Redwood app artifact"
+          name: "build deploy artifact"
           command: yarn redwood build
   deploy-feature:
     docker:
@@ -39,28 +39,26 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Deploy to feature environment"
-          run: echo "Deployed to feature environment with AWS S3 or Azure Container magic..."
+          name: "deploy to feature env"
+          command: echo "Deployed to feature environment with AWS S3 bucket magic or Azure container magic"
   dast:
     docker:
       - image: cimg/go:1.19.0
     steps:
       - checkout
+      - run: go version
       - run:
-          name: "Check Go version"
-          command: go version
-      - run:
-          name: "Install Nuclei CLI"
+          name: "install nuclei-cli"
           command: go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
       - run:
-          name: "Nuclei scan on feature environment"
+          name: "Nuclei scan on QA"
           command: nuclei -u https://flippedcoding.com
 
 workflows:
-  deploy-to-env:
+  deploy-to-qa:
     jobs:
       - unit-tests
       - sast
       - build-app
-      - deploy-feature
+      - deploy-qa
       - dast
